@@ -30,14 +30,15 @@ public class MemberDAO {
 		}
 	}
 	
-	public List listMembers()
+	public List<MemberVO> listMembers()
 	{
-		List membersList = new ArrayList();
+		List<MemberVO> membersList = new ArrayList<MemberVO>();
 		try
 		{
 			conn = dataFactory.getConnection();
 			String query = "select * from t_member order by joinDate desc";
 			System.out.println(query);
+			pstmt = conn.prepareStatement(query);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next())
 			{

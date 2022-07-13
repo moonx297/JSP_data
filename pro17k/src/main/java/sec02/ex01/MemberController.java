@@ -13,56 +13,59 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class MemberController
  */
-@WebServlet("/member/*")	
-// /* : 뒤에 다른 URL이 온다는 뜻 - 브라우저에서 요청 시 두 단계로 요청이 이루어짐
+@WebServlet("/member/*")
 public class MemberController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	MemberDAO memberDAO;
-	
-	public void init() throws ServletException
-	{
+
+	public void init() throws ServletException {
 		memberDAO = new MemberDAO();
 	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doHandle(request, response);
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doHandle(request, response);
 	}
 
-	private void doHandle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
+	private void doHandle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nextPage = null;
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		String action = request.getPathInfo();
 		System.out.println("action:" + action);
-		
-		if (action == null || action.equals("/listMembers.do"))
-		{
-		  List membersList = memberDAO.listMembers();
-		  request.setAttribute("membersList", membersList);
-		  nextPage = "/test02/listMembers.jsp";
-		} else if (action.equals("/addMember.do"))
-		{
+		if (action == null || action.equals("/listMembers.do")) {
+			List<MemberVO> membersList = memberDAO.listMembers();
+			request.setAttribute("membersList", membersList);
+			nextPage = "/test02/listMembers.jsp";
+		} else if (action.equals("/addMember.do")) {
 			String id = request.getParameter("id");
 			String pwd = request.getParameter("pwd");
 			String name = request.getParameter("name");
 			String email = request.getParameter("email");
 			MemberVO memberVO = new MemberVO(id, pwd, name, email);
 			memberDAO.addMember(memberVO);
-			nextPage = "/member/listMembers.do";   //왜 여기는 member/listMembers.do이고
-		}	else if (action.equals("/memberForm.do"))
-		{
+			nextPage = "/member/listMembers.do";
+
+		} else if (action.equals("/memberForm.do")) {
 			nextPage = "/test02/memberForm.jsp";
-		}   else
-		{
-			List membersList = memberDAO.listMembers();
+		} else {
+			List<MemberVO> membersList = memberDAO.listMembers();
 			request.setAttribute("membersList", membersList);
-			nextPage = "/test02/listMembers.jsp";	//여기는 test02/listMembers.jsp이지?
+			nextPage = "/test02/listMembers.jsp";
 		}
-			RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
-			dispatch.forward(request, response);
-	}		
+		RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
+		dispatch.forward(request, response);
+	}
+
 }
