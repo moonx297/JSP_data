@@ -15,37 +15,29 @@ public class BoardDAO {
 	private DataSource dataFactory;
 	Connection conn;
 	PreparedStatement pstmt;
-	
-	public BoardDAO()
-	{
-		try
-		{
+
+	public BoardDAO() {
+		try {
 			Context ctx = new InitialContext();
 			Context envContext = (Context) ctx.lookup("java:/comp/env");
 			dataFactory = (DataSource) envContext.lookup("jdbc/oracle");
-		  } catch (Exception e)
-		{
-			  e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	
-	public List<ArticleVO> selectAllArticles()
-	{
-		List<ArticleVO> articlesList = new ArrayList<ArticleVO>();
-		try
-		{
+
+	public List selectAllArticles() {
+		List articlesList = new ArrayList();
+		try {
 			conn = dataFactory.getConnection();
-			String query = "SELECT LEVEL, articleNO, parentNO, title, content, id, writeDate"
-					+ " from t_board"
-					+ " START WITH parentNO=0"
-					+ " CONNECT BY PRIOR articleNO=parentNO"
-					+ " ORDER SIBLINGS BY articleNO DESC";
-			
+			String query = "SELECT LEVEL,articleNO,parentNO,title,content,id,writeDate" 
+			             + " from t_board"
+					     + " START WITH  parentNO=0" + " CONNECT BY PRIOR articleNO=parentNO"
+					     + " ORDER SIBLINGS BY articleNO DESC";
 			System.out.println(query);
 			pstmt = conn.prepareStatement(query);
 			ResultSet rs = pstmt.executeQuery();
-			while (rs.next())
-			{
+			while (rs.next()) {
 				int level = rs.getInt("level");
 				int articleNO = rs.getInt("articleNO");
 				int parentNO = rs.getInt("parentNO");
@@ -66,15 +58,9 @@ public class BoardDAO {
 			rs.close();
 			pstmt.close();
 			conn.close();
-		  } catch (Exception e)
-		{
-			  e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return articlesList;	
-		}
-
-	public void insertNewArticle(ArticleVO article) {
-		// TODO Auto-generated method stub
-		
+		return articlesList;
 	}
-	}
+}

@@ -28,7 +28,7 @@ public class MemberDAO {
 	}
 
 	public List<MemberVO> listMembers() {
-		List<MemberVO>  membersList = new ArrayList();
+		List<MemberVO>  membersList = new ArrayList<MemberVO>();
 		try {
 			conn = dataFactory.getConnection();
 			String query = "select * from  t_member order by joinDate desc";

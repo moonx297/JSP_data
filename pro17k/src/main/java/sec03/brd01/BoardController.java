@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class BoardController
  */
-@WebServlet("/board/*")	//게시판 컨트롤러가 기본 사이트임으로 board/뒤 url 붙는다.
+//@WebServlet("/board/*")	//게시판 컨트롤러가 기본 사이트임으로 board/뒤 url 붙는다.
 public class BoardController extends HttpServlet {
 	BoardService boardService;
 	ArticleVO articleVO;
